@@ -1,0 +1,7 @@
+
+DCDC1	OLED/Pinheader		3,3V
+DCDC2	ESP32			1,25?3,3V
+
+LDO1	GPS backups batery
+LDO2	Lora			1,8?
+LDO3	GPS			3,3V
