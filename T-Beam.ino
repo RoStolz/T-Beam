@@ -9,6 +9,10 @@ AXP20X_Class axp;
 const uint8_t i2c_sda = 21;
 const uint8_t i2c_scl = 22;
 
+#define GPS_BANUD_RATE 9600
+#define GPS_RX_PIN 34
+#define GPS_TX_PIN 12
+
 void setup() {
   Serial.begin(115200);
   Wire.begin(i2c_sda, i2c_scl);
@@ -44,36 +48,19 @@ void setup() {
   Serial.printf("DCDC3: %s\n", axp.isDCDC3Enable() ? "ENABLE" : "DISABLE");
   Serial.printf("Exten: %s\n", axp.isExtenEnable() ? "ENABLE" : "DISABLE");
 
+  Serial1.begin(GPS_BANUD_RATE, SERIAL_8N1, GPS_RX_PIN, GPS_TX_PIN);
 
-  
 }
 
 void loop() {
-  Serial.println(axp.getDCDC1Voltage());
-  Serial.println(axp.getDCDC2Voltage());
-  Serial.println(axp.getDCDC3Voltage());
-  //Serial.println(axp.getLDO1Voltage());
-  Serial.println(axp.getLDO2Voltage());
-  Serial.println(axp.getLDO3Voltage());
-  Serial.println(axp.getLDO4Voltage());
-
-  Serial.println(axp.getAcinVoltage());
-  Serial.println(axp.getAcinCurrent());
-  Serial.println(axp.getVbusVoltage());
-  Serial.println(axp.getVbusCurrent());
-  Serial.println(axp.getTemp());
-  Serial.println(axp.getTSTemp());
-  Serial.println(axp.getGPIO0Voltage());
-  Serial.println(axp.getGPIO1Voltage());
-  Serial.println(axp.getBattInpower());
-  Serial.println(axp.getBattVoltage());
-  Serial.println(axp.getBattChargeCurrent());
-  Serial.println(axp.getBattDischargeCurrent());
-  Serial.println(axp.getSysIPSOUTVoltage());
-  Serial.println(axp.getSettingChargeCurrent());
-
-
-  delay(1000);
+    while (Serial.available())
+  {
+    Serial1.write(Serial.read());
+  }
+  while (Serial1.available())
+  {
+    Serial.write(Serial1.read());
+  }
 }
 
 void scanI2Cdevice(void)
